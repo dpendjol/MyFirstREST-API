@@ -2,10 +2,13 @@ const express = require("express");
 // const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 const app = express();
 
 app.set('view engine', 'ejs');
+
+app.use(cors());
 
 app.use(express.urlencoded({
    extended: true
@@ -13,11 +16,13 @@ app.use(express.urlencoded({
 
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost:27017/todoDB", { useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect("mongodb://user:passwd@host:port/db?authSource=db", { useNewUrlParser: true, useUnifiedTopology: true})
+	.then(() => console.log('connecting'))
+	.catch(err => console.error('something went wrong', err));
 
 const todoItemSchema = new mongoose.Schema({
-    name: String,
-    content: String,
+    description: String,
+    done: Boolean,
 });
 
 const todoItem = mongoose.model('TodoItem', todoItemSchema)
@@ -28,6 +33,7 @@ app.get('/api', function(req, res){
     */
     todoItem.find(function(err, result) {
         if (!err) {
+	    console.log(result)
             res.send(result);
         } else {
             res.send(err);
@@ -39,8 +45,7 @@ app.post('/api', (req, res) => {
     /*
     Handeling post request to the server
     */
-    const name = req.body.name;
-    const content = req.body.content;
+    console.log(req.body);
 
     const newItem = new todoItem(req.body);
 
