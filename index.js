@@ -10,6 +10,7 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({
    extended: true
 }));
+
 app.use(express.static("public"));
 
 mongoose.connect("mongodb://localhost:27017/todoDB", { useNewUrlParser: true, useUnifiedTopology: true});
@@ -53,14 +54,51 @@ app.post('/api', (req, res) => {
 });
 
 app.delete('/api', function(req, res) {
-    todoItem.deleteMany(req.body, function(err, result) {
+    todoItem.deleteMany({}, function(err, result) {
         if (!err) {
             res.send(result);
         } else {
             res.send(err);
         }
     })
-})
+});
+
+/////////////////// SPECIFIC ITEMS
+
+app.route('/api/:id')
+    .get(function(req, res) {
+        todoItem.findOne({_id: req.params.id}, function(err, result) {
+            if (result) {
+                res.send(result);
+            } else {
+                res.send("Nothing found")
+            }
+        });
+    })
+    .put(function(req, res){
+        todoItem.update({_id: req.params.id}, req.body, {overwrite: true}, function(err, result) {
+            if (!err) {
+                res.send('Correcty updated')
+            }
+        })
+    })
+    .patch(function(req, res){
+        todoItem.update({_id: req.params.id}, {$set: req.body}, function(err, result) {
+            if (!err) {
+                res.send('Correcty updated')
+            }
+        })
+    })
+    .delete(function(req, res) {
+        myid = req.params.id;
+        todoItem.deleteOne({_id: req.params.id}, function(err) {
+            if (!err) {
+                res.send('Deleted item')
+            }
+        });
+    });
+
+app.get('/api')
 
 app.listen(3000, function() {
   console.log("Server started on port 3000");
