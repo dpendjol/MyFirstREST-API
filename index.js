@@ -22,6 +22,9 @@ const todoItemSchema = new mongoose.Schema({
 const todoItem = mongoose.model('TodoItem', todoItemSchema)
 
 app.get('/api', function(req, res){
+    /*
+        getting data from the API
+    */
     todoItem.find(function(err, result) {
         if (!err) {
             res.send(result);
@@ -32,24 +35,17 @@ app.get('/api', function(req, res){
 });
 
 app.post('/api', (req, res) => {
+    /*
+    Handeling post request to the server
+    */
     const name = req.body.name;
     const content = req.body.content;
-    console.log('NAME: ', name);
-    console.log('CONTENT: ', content);
 
     const newItem = new todoItem({
         name: name,
         content: content
     });
 
-    newItem.save(function(err) {
-        if (!err){
-            console.log('WentA oke');
-        } else {
-            console.log('ERROR OCCURED: ', err);
-        }
-    });
-    console.log(todoItem.find());
     res.send(newItem)
 });
 
