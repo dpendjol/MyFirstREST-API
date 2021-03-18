@@ -41,13 +41,26 @@ app.post('/api', (req, res) => {
     const name = req.body.name;
     const content = req.body.content;
 
-    const newItem = new todoItem({
-        name: name,
-        content: content
-    });
+    const newItem = new todoItem(req.body);
 
-    res.send(newItem)
+    newItem.save(function(err, result){
+      if (!err) {
+        res.send(result);
+      } else {
+        res.send(err);
+      }
+    })
 });
+
+app.delete('/api', function(req, res) {
+    todoItem.deleteMany(req.body, function(err, result) {
+        if (!err) {
+            res.send(result);
+        } else {
+            res.send(err);
+        }
+    })
+})
 
 app.listen(3000, function() {
   console.log("Server started on port 3000");
