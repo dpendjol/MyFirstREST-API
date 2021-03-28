@@ -6,6 +6,12 @@ require('dotenv').config();
 
 const app = express();
 
+user = process.env.db_user
+passwd = process.env.db_passwd
+host = process.env.db_host
+port = process.env.db_port
+db = process.env.db_name
+
 app.set('view engine', 'ejs');
 
 app.use(cors());
@@ -15,8 +21,8 @@ app.use(express.json({
 }));
 
 app.use(express.static("public"));
-
-mongoose.connect("mongodb://user:passwd@host:port/db?authSource=db", { useNewUrlParser: true, useUnifiedTopology: true})
+connection_string = 
+mongoose.connect(`mongodb://${user}:${passwd}@${host}:${port}/${db}?authSource=${db}`, { useNewUrlParser: true, useUnifiedTopology: true})
 	.then(() => console.log('connecting'))
 	.catch(err => console.error('something went wrong', err));
 
