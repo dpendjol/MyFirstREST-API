@@ -1,8 +1,8 @@
 const express = require("express");
-// const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require('mongoose');
 const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
 
@@ -23,6 +23,10 @@ mongoose.connect("mongodb://user:passwd@host:port/db?authSource=db", { useNewUrl
 const todoItemSchema = new mongoose.Schema({
     description: String,
     done: Boolean,
+});
+todoItem.set("timestamps", {
+    createdAt: "_createdOn",
+    updatedAt: "_updatedOn"
 });
 
 const todoItem = mongoose.model('TodoItem', todoItemSchema)
