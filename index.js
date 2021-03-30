@@ -2,12 +2,12 @@ const express = require("express");
 const ejs = require("ejs");
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config();
+require('dotenv').config('~/.env');
 
 const app = express();
 
 user = process.env.db_user
-passwd = process.env.db_passwd
+passwd = process.env.db_pass
 host = process.env.db_host
 port = process.env.db_port
 db = process.env.db_name
@@ -22,7 +22,7 @@ app.use(express.json({
 
 app.use(express.static("public"));
 connection_string = 
-mongoose.connect(`mongodb://${user}:${passwd}@${host}:${port}/${db}?authSource=${db}`, { useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(`mongodb://${user}:${pass}@${host}:${port}/${db}?authSource=${db}`, { useNewUrlParser: true, useUnifiedTopology: true})
 	.then(() => console.log('connecting'))
 	.catch(err => console.error('something went wrong', err));
 
@@ -30,6 +30,7 @@ const todoItemSchema = new mongoose.Schema({
     description: String,
     done: Boolean,
 });
+
 todoItem.set("timestamps", {
     createdAt: "_createdOn",
     updatedAt: "_updatedOn"
