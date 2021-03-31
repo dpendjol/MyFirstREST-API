@@ -34,7 +34,7 @@ const todoItemSchema = new mongoose.Schema({
     done: Boolean,
 });
 
-todoItem.set("timestamps", {
+todoItemSchema.set("timestamps", {
     createdAt: "_createdOn",
     updatedAt: "_updatedOn"
 });
@@ -46,7 +46,7 @@ const songItemSchema = new mongoose.Schema({
     rating: Number,
 });
 
-songItem.set("timestamps", {
+songItemSchema.set("timestamps", {
     createdAt: "_createdOn",
     updatedAt: "_updatedOn"
 });
@@ -79,7 +79,6 @@ app.get('/api', function(req, res){
 
     queryResult.exec(function(err, result) {
         if (!err) {
-            console.log(result)
             res.send(result);
         } else {
             res.send(err);
@@ -92,7 +91,6 @@ app.post('/api', (req, res) => {
     /*
     Handeling post request to the server
     */
-    console.log(req.body);
 
     const newItem = new todoItem(req.body);
 
@@ -155,21 +153,7 @@ app.get('/songs', function(req, res){
         getting data from the API
     */
 
-    let queryResult = ''
-    if (req.query.sort) {
-        const sorting = req.query.sort;
-        if (sorting[0] === '-') {
-            field = sorting.slice(1)
-
-            sortBy = {[field]: -1}
-        } else {
-
-            sortBy = {[sorting]: 1}
-        }
-        queryResult = songItem.find().sort(sortBy)
-    } else {
-        queryResult = songItem.find()
-    }
+    const queryResult = songItem.find()
 
     queryResult.exec(function(err, result) {
         if (!err) {
@@ -185,7 +169,6 @@ app.post('/songs', (req, res) => {
     /*
     Handeling post request to the server
     */
-    console.log(req.body);
 
     const newItem = new songItem(req.body);
 
@@ -244,10 +227,10 @@ app.route('/songs/:id')
     });
 
 app.listen(3000, function() {
-  console.log("Server started on port 3000");
+  console.log("HTTP Server started on port 3000");
 });
 
 server.listen(3001, function() {
-    console.log("Server started on port 3000");
+    console.log("HTTPS Server started on port 3001");
   });
 
