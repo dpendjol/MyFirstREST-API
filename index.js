@@ -11,11 +11,11 @@ const server = https.createServer({key: key, cert: cert}, app);
 
 require('dotenv').config('~/.env');
 
-user = process.env.db_user
-pass = process.env.db_pass
-host = process.env.db_host
-port = process.env.db_port
-db = process.env.db_name
+const user = process.env.db_user
+const pass = process.env.db_pass
+const host = process.env.db_host
+const port = process.env.db_port
+const db = process.env.db_name
 
 app.set('view engine', 'ejs');
 
